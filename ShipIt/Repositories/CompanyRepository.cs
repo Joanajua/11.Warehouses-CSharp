@@ -23,6 +23,7 @@ namespace ShipIt.Repositories
             string CompanyCountSQL = "SELECT COUNT(*) FROM gcp";
             return (int)QueryForLong(CompanyCountSQL);
         }
+      
 
         public CompanyDataModel GetCompany(string gcp)
         {

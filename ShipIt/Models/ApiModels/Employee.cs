@@ -15,6 +15,7 @@ namespace ShipIt.Models.ApiModels
         public int WarehouseId { get; set; }
         public EmployeeRole role { get; set; }
         public string ext { get; set; }
+        
 
         public Employee(EmployeeDataModel dataModel)
         {

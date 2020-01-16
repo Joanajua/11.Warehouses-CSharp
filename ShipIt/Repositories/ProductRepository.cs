@@ -80,7 +80,7 @@ namespace ShipIt.Repositories
                 parametersList.Add(product.GetNpgsqlParameters().ToArray());
             }
 
-            var conflicts = TryGetProductsByGtin(gtins);
+            var conflicts = TryGetProductsByGtin(gtins).ToList();
             if (conflicts.Any())
             {
                 throw new MalformedRequestException(string.Format("Cannot add products with existing gtins: {0}",

@@ -29,7 +29,7 @@ namespace ShipIt.Controllers
             this.productRepository = productRepository;
         }
 
-        // GET api/status/{warehouseId}
+        //END POINT
         public InboundOrderResponse Get(int warehouseId)
         {
             log.Info("orderIn for warehouseId: " + warehouseId);
@@ -38,28 +38,45 @@ namespace ShipIt.Controllers
 
             log.Debug(String.Format("Found operations manager: {0}", operationsManager));
 
-            var allStock = stockRepository.GetStockByWarehouseId(warehouseId);
 
-            Dictionary<Company, List<InboundOrderLine>> orderlinesByCompany = new Dictionary<Company, List<InboundOrderLine>>();
-            foreach (var stock in allStock)
+            var allInbound = stockRepository.GetInboundByWarehouseId(warehouseId);
+
+            IEnumerable<OrderSegment> orderSegments = CreateOrderSegments(allInbound);
+
+            return new InboundOrderResponse()
             {
-                Product product = new Product(productRepository.GetProductById(stock.ProductId));
-                if(stock.held < product.LowerThreshold && !product.Discontinued)
+                OperationsManager = operationsManager,
+                WarehouseId = warehouseId,
+                OrderSegments = orderSegments.ToList()
+            };
+        }
+
+        private static IEnumerable<OrderSegment> CreateOrderSegments(IEnumerable<InboundDataModel> allInbound)
+        {
+            Dictionary<Company, List<InboundOrderLine>> orderlinesByCompany = new Dictionary<Company, List<InboundOrderLine>>();
+
+
+
+            foreach (var inbound in allInbound)
+
+            {
+                if (inbound.Held < inbound.LowerThreshold && inbound.Discontinued == 0)
                 {
-                    Company company = new Company(companyRepository.GetCompany(product.Gcp));
 
-                    var orderQuantity = Math.Max(product.LowerThreshold * 3 - stock.held, product.MinimumOrderQuantity);
+                    Company newcompany = new Company(inbound);
 
-                    if (!orderlinesByCompany.ContainsKey(company))
+                    var orderQuantity = Math.Max(inbound.LowerThreshold * 3 - inbound.Held, inbound.MinimumOrderQuantity);
+
+                    if (!orderlinesByCompany.ContainsKey(newcompany))
                     {
-                        orderlinesByCompany.Add(company, new List<InboundOrderLine>());
+                        orderlinesByCompany.Add(newcompany, new List<InboundOrderLine>());
                     }
 
-                    orderlinesByCompany[company].Add( 
+                    orderlinesByCompany[newcompany].Add(
                         new InboundOrderLine()
                         {
-                            gtin = product.Gtin,
-                            name = product.Name,
+                            gtin = inbound.Gtin,
+                            name = inbound.Name,
                             quantity = orderQuantity
                         });
                 }
@@ -74,13 +91,7 @@ namespace ShipIt.Controllers
             });
 
             log.Info("Constructed inbound order");
-
-            return new InboundOrderResponse()
-            {
-                OperationsManager = operationsManager,
-                WarehouseId = warehouseId,
-                OrderSegments = orderSegments
-            };
+            return orderSegments;
         }
 
         public void Post([FromBody]InboundManifestRequestModel requestModel)

@@ -13,7 +13,7 @@ namespace ShipIt.Repositories
     {
         int GetTrackedItemsCount();
         int GetStockHeldSum();
-        IEnumerable<StockDataModel> GetStockByWarehouseId(int id);
+        IEnumerable<InboundDataModel> GetInboundByWarehouseId(int id);
         Dictionary<int, StockDataModel> GetStockByWarehouseAndProductIds(int warehouseId, List<int> productIds);
         void RemoveStock(int warehouseId, List<StockAlteration> lineItems);
         void AddStock(int warehouseId, List<StockAlteration> lineItems);
@@ -34,24 +34,24 @@ namespace ShipIt.Repositories
             return (int)QueryForLong(sql);
         }
 
-        public IEnumerable<StockDataModel> GetStockByWarehouseId(int id)
+        public IEnumerable<InboundDataModel> GetInboundByWarehouseId(int id)
         {
-            string sql = "SELECT p_id, hld, w_id FROM stock WHERE w_id = @w_id";
+            string sql = "SELECT * FROM inbound WHERE w_id = @w_id";
             var parameter = new NpgsqlParameter("@w_id", id);
             string noProductWithIdErrorMessage = string.Format("No stock found with w_id: {0}", id);
             try
             {
-                return base.RunGetQuery(sql, reader => new StockDataModel(reader), noProductWithIdErrorMessage, parameter).ToList();
+                return base.RunGetQuery(sql, reader => new InboundDataModel(reader), noProductWithIdErrorMessage, parameter).ToList();
             }
             catch (NoSuchEntityException)
             {
-                return new List<StockDataModel>();
+                return new List<InboundDataModel>();
             }
         }
 
         public Dictionary<int, StockDataModel> GetStockByWarehouseAndProductIds(int warehouseId, List<int> productIds)
         {
-            string sql = string.Format("SELECT p_id, hld, w_id FROM stock WHERE w_id = @w_id AND p_id IN ({0})",
+            string sql = string.Format("SELECT p_id, w_id, hld FROM stock WHERE w_id = @w_id AND p_id IN ({0})",
                 String.Join(",", productIds));
             var parameter = new NpgsqlParameter("@w_id", warehouseId);
             string noProductWithIdErrorMessage = string.Format("No stock found with w_id: {0} and p_ids: {1}",
