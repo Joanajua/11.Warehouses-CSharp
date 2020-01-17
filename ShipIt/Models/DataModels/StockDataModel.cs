@@ -4,8 +4,8 @@ namespace ShipIt.Models.DataModels
 {
     public class StockDataModel : DataModel
     {
-        [DatabaseColumnName("p_id")]
-        public int ProductId { get; set; }
+        [DatabaseColumnName("gtin_cd")]
+        public string ProductGtin { get; set; }
         [DatabaseColumnName("w_id")]
         public int WarehouseId { get; set; }
         [DatabaseColumnName("hld")]

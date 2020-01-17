@@ -9,7 +9,7 @@ namespace ShipIt.Models.ApiModels
 {
     public class Product
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string Gtin { get; set; }
         public string Gcp { get; set; }
         public string Name { get; set; }
@@ -20,7 +20,7 @@ namespace ShipIt.Models.ApiModels
 
         public Product(ProductDataModel dataModel)
         {
-            Id = dataModel.Id;
+            //Id = dataModel.Id;
             Gtin = dataModel.Gtin;
             Gcp = dataModel.Gcp;
             Name = dataModel.Name;
@@ -38,7 +38,7 @@ namespace ShipIt.Models.ApiModels
         public override String ToString()
         {
             return new StringBuilder()
-                    .AppendFormat("id: {0}, ", Id)
+                    //.AppendFormat("id: {0}, ", Id)
                     .AppendFormat("gtin: {0}, ", Gtin)
                     .AppendFormat("gcp: {0}, ", Gcp)
                     .AppendFormat("name: {0}, ", Name)

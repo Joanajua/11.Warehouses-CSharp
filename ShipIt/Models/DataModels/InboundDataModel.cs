@@ -5,8 +5,8 @@ namespace ShipIt.Models.DataModels
     public class InboundDataModel : DataModel
     {
         //stock sql view
-        [DatabaseColumnName("p_id")]
-        public int ProductId { get; set; }
+        //[DatabaseColumnName("p_id")]
+        //public int ProductId { get; set; }
         [DatabaseColumnName("w_id")]
         public int WarehouseId { get; set; }
         [DatabaseColumnName("hld")]

@@ -30,25 +30,25 @@ namespace ShipItTest
         public void TestAddNewStock()
         {
             onSetUp();
-            var productId = productRepository.GetProductByGtin(GTIN).Id;
+            var Gtin = productRepository.GetProductByGtin(GTIN).Gtin;
 
-            stockRepository.AddStock(1, new List<StockAlteration>(){new StockAlteration(productId, 1)});
+            stockRepository.AddStock(1, new List<StockAlteration>(){new StockAlteration(Gtin, 1)});
 
-            var databaseStock = stockRepository.GetStockByWarehouseAndProductIds(1, new List<int>(){productId});
-            Assert.AreEqual(databaseStock[productId].held, 1);
+            var databaseStock = stockRepository.GetStockByWarehouseAndProductIds(1, new List<string>(){Gtin});
+            Assert.AreEqual(databaseStock[Gtin].held, 1);
         }
 
         [TestMethod]
         public void TestUpdateExistingStock()
         {
             onSetUp();
-            var productId = productRepository.GetProductByGtin(GTIN).Id;
-            stockRepository.AddStock(1, new List<StockAlteration>() { new StockAlteration(productId, 2) });
+            var Gtin = productRepository.GetProductByGtin(GTIN).Gtin;
+            stockRepository.AddStock(1, new List<StockAlteration>() { new StockAlteration(Gtin, 2) });
 
-            stockRepository.AddStock(1, new List<StockAlteration>() { new StockAlteration(productId, 5) });
+            stockRepository.AddStock(1, new List<StockAlteration>() { new StockAlteration(Gtin, 5) });
 
-            var databaseStock = stockRepository.GetStockByWarehouseAndProductIds(1, new List<int>() { productId });
-            Assert.AreEqual(databaseStock[productId].held, 7);
+            var databaseStock = stockRepository.GetStockByWarehouseAndProductIds(1, new List<string>() { Gtin });
+            Assert.AreEqual(databaseStock[Gtin].held, 7);
         }
     }
 }

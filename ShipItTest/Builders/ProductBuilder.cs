@@ -9,7 +9,6 @@ namespace ShipItTest.Builders
 {
     public class ProductBuilder
     {
-        private int Id = 1;
         private string Gtin = "0099346374235";
         private string Gcp = "0000346";
         private string Name = "2 Count 1 T30 Torx Bit Tips TX";
@@ -18,11 +17,7 @@ namespace ShipItTest.Builders
         private int Discontinued = 0;
         private int MinimumOrderQuantity = 108;
 
-        public ProductBuilder setId(int id)
-        {
-            Id = id;
-            return this;
-        }
+
 
         public ProductBuilder setGtin(String gtin)
         {
@@ -73,7 +68,6 @@ namespace ShipItTest.Builders
                 Discontinued = this.Discontinued,
                 Gcp = this.Gcp,
                 Gtin = this.Gtin,
-                Id = this.Id,
                 LowerThreshold = this.LowerThreshold,
                 MinimumOrderQuantity = this.MinimumOrderQuantity,
                 Name = this.Name,
@@ -88,7 +82,6 @@ namespace ShipItTest.Builders
                 Discontinued = this.Discontinued == 1,
                 Gcp = this.Gcp,
                 Gtin = this.Gtin,
-                Id = this.Id,
                 LowerThreshold = this.LowerThreshold,
                 MinimumOrderQuantity = this.MinimumOrderQuantity,
                 Name = this.Name,

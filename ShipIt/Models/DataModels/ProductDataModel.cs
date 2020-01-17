@@ -54,8 +54,8 @@ namespace ShipIt.Models.DataModels
 
     public class ProductDataModel : DataModel
     {
-        [DatabaseColumnName("p_id")]
-        public int Id { get; set; }
+        //[DatabaseColumnName("p_id")]
+        //public int Id { get; set; }
 
         [DatabaseColumnName("gtin_cd")]
         public string Gtin { get; set; }
@@ -86,7 +86,7 @@ namespace ShipIt.Models.DataModels
 
         public ProductDataModel(Product apiModel)
         {
-            Id = apiModel.Id;
+            //Id = apiModel.Id;
             Gtin = apiModel.Gtin;
             Gcp = apiModel.Gcp;
             Name = apiModel.Name;
